@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="61957671-305b-40dc-b2b1-5fd05f3ab937" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1l9VLUFiWdENBMmK1j2Q2VYCjSx" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Crime-Management-Online-Portal-in-Django-Jquery-and-Bootstrap-master" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Nazmul\PycharmProject\lab_exam\templates\core\instructor" />
+      <recent name="C:\Users\Nazmul\PycharmProject\lab_exam\static" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Nazmul\PycharmProject\lab_exam" />
+      <recent name="C:\Users\Nazmul\PycharmProject\lab_exam\static" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="lab_exam" type="Python.DjangoServer" factoryName="Django server">
+      <module name="lab_exam" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="61957671-305b-40dc-b2b1-5fd05f3ab937" name="Default Changelist" comment="" />
+      <created>1607009238762</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1607009238762</updated>
+      <workItem from="1607009519125" duration="16350000" />
+      <workItem from="1607085790031" duration="13594000" />
+      <workItem from="1607102369500" duration="574000" />
+      <workItem from="1607144964152" duration="885000" />
+      <workItem from="1608823288952" duration="3275000" />
+      <workItem from="1608966522141" duration="657000" />
+      <workItem from="1609737222794" duration="1759000" />
+      <workItem from="1609922759445" duration="850000" />
+      <workItem from="1610006683460" duration="2091000" />
+      <workItem from="1610174532862" duration="2548000" />
+      <workItem from="1610207979120" duration="7301000" />
+      <workItem from="1610264201591" duration="22549000" />
+      <workItem from="1610359867423" duration="4432000" />
+      <workItem from="1610379539161" duration="11001000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="463" y="119" key="FileChooserDialogImpl" timestamp="1618808344971">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="463" y="119" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1618808344971" />
+    <state x="1957" y="302" key="com.intellij.ide.util.TipDialog" timestamp="1610379545725">
+      <screen x="1366" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1957" y="302" key="com.intellij.ide.util.TipDialog/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1610379545725" />
+  </component>
+</project>
