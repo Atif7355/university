@@ -1,0 +1,210 @@
+{% extends 'base1.html' %}
+ {% load static %}
+
+ {% block title %} Staff DashBoard-Evaluate {% endblock %}
+ {%block content%}
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+</head>
+<div class="wrapper">
+
+    <h1>Staff DashBoard-Manual Evaluate</h1>
+
+    <!-- Main content -->
+    <section class="content container-fluid">
+
+      <!--------------------------
+        | Your Page Content Here |
+        -------------------------->
+        <table id="example" class="table table-striped table-bordered textwrap" style="width:100%">
+        </table>
+    </section>
+  </div>
+</div>
+<script>
+  var Table, order = [], start = false;
+  $(document).ready(function() {
+    var i, j;
+    var input_data = {{data|safe}};
+    createTable(input_data);
+});
+
+ function createTable(input_data)
+ {
+   var text = "<thead><tr><th>Question</th><th>Options</th><th>Answer</th><th>Your Answer</th><th>Mark as</th><th>Status</th><th>Score</th></tr></thead>";
+    text += "<tbody>";
+    for(i = 1; i <= Object.keys(input_data).length; i++)
+    {
+     var myArray = {'exam_id': '{{exam_id}}', 'score':input_data[i]['score'], 'result_id':input_data[i]['result_id'], 'user_exam_attempt_id':'{{registration_id}}'};
+     text += "<tr><td>"+input_data[i]['question']+"</td><td>";
+     if(input_data[i]['question_type'] == "Multiple Choice Single Answer" || input_data[i]['question_type'] == "Multiple Choice Multiple Answer")
+     {
+       for(var key in input_data[i]['options'])
+       {
+         text += input_data[i]['options'][key] + "; ";
+       }
+     }
+     else
+     {
+       text += "None";
+     }
+     text += "</td><td>";
+     text += input_data[i]['answer'];
+     text += "</td><td>";
+     text += input_data[i]['your_answers'];
+     text += "</td><td>";
+     if(input_data[i]['question_type'] == "Multiple Choice Single Answer" || input_data[i]['question_type'] == "Multiple Choice Multiple Answer" || input_data[i]['question_type'] == "Match the Column")
+     {
+       if(input_data[i]['gained_score'] == input_data[i]['score'])
+       {
+         text += "<select class='btn btn-success btn-xs disabled'>";
+         text += "<option value='1' selected = 'selected'>Correct</option>";
+       }
+       else
+       {
+         text += "<select class='btn btn-danger btn-xs disabled'>";
+         text += "<option value='0' selected = 'selected'>Wrong</option>";
+       }
+     } 
+     else if(input_data[i]['verify'] != "1")
+     {
+       text += "<select class='btn btn-warning btn-xs changeAnsStatus'>";
+       text += "<option value=''>Pending</option>";
+       text += "<option value='"+ JSON.stringify(myArray) +"' data-dismiss = 'modal'>Correct</option>";
+       text += "<option value='"+ JSON.stringify(myArray) +"' data-dismiss = 'modal'>Wrong</option>";
+     }
+     else if(input_data[i]['gained_score'] == input_data[i]['score'])
+     {
+       text += "<select class='btn btn-success btn-xs changeAnsStatus' >";
+       text += "<option value='"+ JSON.stringify(myArray) +"' selected = 'selected'>Correct</option>";
+       text += "<option value='"+ JSON.stringify(myArray) +"'  data-dismiss = 'modal'>Wrong</option>";
+     }
+     else
+     {
+       text += "<select class='btn btn-danger btn-xs changeAnsStatus'>";
+       text += "<option value='"+ JSON.stringify(myArray) +"' data-dismiss = 'modal'>Correct</option>";
+       text += "<option value='"+ JSON.stringify(myArray) +"' selected = 'selected'>Wrong</option>";
+     }
+     text += "</td><td>";
+     if(input_data[i]['verify'] == "1")
+     {
+       text += "<button class='btn btn-primary btn-xs'><i class='fa fa-check-square-o'></i>&nbsp;Verified</button>";
+     }
+     else
+     {
+       text += "<button class='btn btn-warning btn-xs'><i class='fa fa-warning'></i>&nbsp;Not Verified</button>";
+     }
+     text += "</td><td>";
+     text += input_data[i]['gained_score'];
+     text += "</td></tr>";
+    }
+    text += "</tbody>";
+    document.getElementById('example').innerHTML = text;
+    if(start == true)
+    {
+      order = Table.order();
+    } 
+    Table = $('#example').DataTable( {
+        "destroy": true,
+        "order": order,
+        responsive: {
+            details: {
+                display: $.fn.dataTable.Responsive.display.modal( {
+                    header: function ( row ) {
+                        var data = row.data();
+                        return 'Details for '+data[0];
+                    }
+                } ),
+                renderer: $.fn.dataTable.Responsive.renderer.tableAll( {
+                    tableClass: 'table'
+                } )
+            }
+        }
+    });
+    start = true;
+ }
+</script>
+<script>
+  $(document).on('change', ".changeAnsStatus",function(){
+    var changedDetails = $(this);
+    if(changedDetails.val() != '')
+    {
+      var obtained_details = JSON.parse(changedDetails.val());
+      obtained_details['csrfmiddlewaretoken'] = '{{ csrf_token }}';
+    var selected_option = $("option:selected", this);
+    if(selected_option.text() == "Correct")
+    {
+      obtained_details['check'] = 1;
+      console.log(obtained_details);
+      $('.modal').modal('hide');
+    $.ajax({
+      type: "POST",
+      url: "/manual_evaluate/",
+      data: obtained_details,
+      dataType: 'text',
+      success:function(data){
+        console.log(data);
+       createTable(JSON.parse(data));
+      },
+        error: function (jqXHR, exception) {
+          var msg = '';
+          if (jqXHR.status === 0) {
+              msg = 'Not connect.\n Verify Network.';
+          } else if (jqXHR.status == 404) {
+              msg = 'Requested page not found. [404]';
+          } else if (jqXHR.status == 500) {
+              msg = 'Internal Server Error [500].';
+          } else if (exception === 'parsererror') {
+              msg = 'Requested JSON parse failed.';
+          } else if (exception === 'timeout') {
+              msg = 'Time out error.';
+          } else if (exception === 'abort') {
+              msg = 'Ajax request aborted.';
+          } else {
+              msg = 'Uncaught Error.\n' + jqXHR.responseText;
+          }
+          console.log(msg);
+      },
+    });
+    }
+    else if(selected_option.text() == "Wrong")
+    {
+      obtained_details['check'] = 0;
+      console.log(obtained_details);
+      $('.modal').modal('hide');
+    $.ajax({
+      type: "POST",
+      url: "/manual_evaluate/",
+      data: obtained_details,
+      dataType: 'text',
+      success:function(data){
+        console.log(data);
+       createTable(JSON.parse(data));
+      },
+      error: function (jqXHR, exception) {
+        var msg = '';
+        if (jqXHR.status === 0) {
+            msg = 'Not connect.\n Verify Network.';
+        } else if (jqXHR.status == 404) {
+            msg = 'Requested page not found. [404]';
+        } else if (jqXHR.status == 500) {
+            msg = 'Internal Server Error [500].';
+        } else if (exception === 'parsererror') {
+            msg = 'Requested JSON parse failed.';
+        } else if (exception === 'timeout') {
+            msg = 'Time out error.';
+        } else if (exception === 'abort') {
+            msg = 'Ajax request aborted.';
+        } else {
+            msg = 'Uncaught Error.\n' + jqXHR.responseText;
+        }
+        console.log(msg);
+    },
+    });
+    }
+    }
+});
+</script>
+ {%endblock%}

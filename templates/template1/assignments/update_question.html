@@ -1,0 +1,361 @@
+{% extends 'base1.html' %}
+{% load static %}
+
+ {% block title %} Update Questions {% endblock %}
+ {%block content%}
+ <head>
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+ </head>
+   <!-- Content Wrapper. Contains page content -->
+   <div class="content-wrapper">
+       <h1>
+        Staff DashBoard- Update Question
+       </h1>
+ 
+     <!-- Main content -->
+     <section class="content container-fluid">
+ 
+       <!--------------------------
+         | Your Page Content Here |
+         -------------------------->
+         <div class="container-fluid">
+         <div class="box box-info">
+             <div class="box-header with-border">
+               <h3 class="box-title">Modify question</h3>
+             </div>
+             <!-- /.box-header -->
+             <!-- form start -->
+             <form class="form-horizontal" action = "{% url 'UMS_app:modify_question'%}" method = "POST">
+               {% csrf_token %}
+               <input type = "hidden" name="id" value = "{{id}}">
+               <div class="-bocarddy">
+                 <div class="form-group">
+                     <select class="form-control" name="subject" id = "subject" required>
+                     <option disabled value>Subjects</option>
+                       {% for i in subjects %}
+                       {% if i.id == subject %}
+                       <option value = "{{i.id}}" selected="selected">{{i.subject_name}}</option>
+                       {% else %}      
+                       <option value = "{{i.id}}">{{i.subject_name}}</option>
+                       {% endif %}
+                       {% endfor %}
+                     </select>
+                     <select class="form-control" name="exam" id = "exam" required>
+                     <option disabled value>Examination</option>
+                     {% for i in exams %}
+                       {% if i.id == exam %}
+                       <option value = "{{i.id}}" selected="selected">{{i.exam_name}}</option>
+                       {% else %}      
+                       <option value = "{{i.id}}">{{i.exam_name}}</option>
+                       {% endif %}
+                       {% endfor %}
+                     </select>
+                 </div>
+                 <div class="form-group">
+                     <select class="form-control" name="level" required>
+                     <option disabled value>Level</option>
+                     {% for i in levels %}
+                       {% if i.id == level %}
+                       <option value = "{{i.id}}" selected="selected">{{i.level_name}}</option>
+                       {% else %}      
+                       <option value = "{{i.id}}">{{i.level_name}}</option>
+                       {% endif %}
+                     {% endfor %}
+                     </select>
+                     <select class="form-control" name="status" required>
+                     {% if status == 1 %}
+                    <option value="1" selected="selected"> Active </option>
+                    <option value="0"> Inactive </option>
+                    {% elif status == 0 %}
+                    <option value="1"> Active </option>
+                    <option value="0" selected="selected"> Inactive </option>
+                    {% endif %}
+                  </select>
+                 </div><div class="form-group">
+                     <select class="form-control" name="question_type" id = "type" required>
+                     <option disabled value>Question type</option>
+                       {% for i in question_types %}
+                         {% if i.q_type == question_type %}
+                       <option value = "{{i.id}}" selected="selected">{{i.q_type}}</option>
+                       {% else %}      
+                       <option value = "{{i.id}}">{{i.q_type}}</option>
+                       {% endif %}
+                       {% endfor %}
+                     </select>
+                     <input class="form-control" name="score" id="inputName" placeholder="Score" type="text" value = "{{score}}" required>
+                   </div>
+               <!--<div class="form-group">
+                   <div class="col-sm-12">
+                     <input class="form-control" id="inputName" placeholder="Question" type="text" required>
+                   </div>
+                 </div>
+                 <div class="form-group">
+                   <div class="col-sm-12">
+                     <input class="form-control" id="inputDescription" placeholder="Description" type="text" required>
+                   </div>
+                 </div>
+                 <div class="form-group">
+                   <div class="col-sm-6">
+                     <select class="form-control" name="status" id="noq" onchange="myFunction()">
+                     <option disabled selected value>   Number of options</option>
+                             <option value = "2">2</option>
+                             <option value = "3">3</option>
+                             <option value = "4">4</option>
+                             <option value = "5">5</option>
+                             <option value = "6">6</option>
+                             <option value = "7">7</option>
+                             <option value = "8">8</option>
+                             <option value = "9">9</option>
+                             <option value = "10">10</option>
+                     </select>
+                   </div>
+                   <div class="col-sm-6"></div>
+               </div>-->
+               <div class = "container" style="width:100%">
+                 <div class = 'row'><div class= 'col-lg-12'><textarea name = 'question' class='form-control' rows=3 style='width:100%;font-weight:bold;margin-left:10px' placeholder='Enter your question here' required>{{question}}</textarea><br><br></div></div>
+                 <div class = 'row'><div class= 'col-lg-12'><textarea name = 'description' class='form-control' rows=3 style='width:100%;font-weight:bold;margin-left:10px' placeholder='Enter your description here' required>{{description}}</textarea><br><br></div></div>
+               </div>
+               <div class = "container" id = "question" style="width:100%">
+               {% if question_type == "Multiple Choice Single Answer" %}
+               <div class = 'row'><div class= 'col-lg-12'><span style='font-weight:200;margin-left:10px'><h5>Enter the no. of options:</h5></span></div></div><div class = 'row'><div class= 'col-lg-12'><select class='form-control' name=options_number id='in' onchange='optionsMCQ()' required>
+                 <option value = ''>Select</option>
+                 {% for i in numbers%}
+                 {% if i == options_number %}
+                 <option value = '{{i}}' selected="selected">{{i}}</option>
+                 {% else %}
+                 <option value = '{{i}}'>{{i}}</option>
+                 {% endif %}
+                 {% endfor %}
+               </select></div></div>                                   
+               {% elif question_type == "Multiple Choice Multiple Answer" %}
+               <div class = 'row'><div class= 'col-lg-12'><span style='font-weight:200;margin-left:10px'><h5>Enter the no. of options:</h5></span></div></div><div class = 'row'><div class= 'col-lg-12'><select class='form-control' name=options_number id='in' onchange='optionsMCMQ()' required>
+                 <option value = ''>Select</option>
+                 {% for i in numbers%}
+                 {% if i == options_number %}
+                 <option value = '{{i}}' selected="selected">{{i}}</option>
+                 {% else %}
+                 <option value = '{{i}}'>{{i}}</option>
+                 {% endif %}
+                 {% endfor %}</select></div></div>                                    
+               {% elif question_type == "Match the Column" %}
+             <div class = 'row'><div class= 'col-lg-12'><span style='font-weight:200;margin-left:10px'><h5>Enter the no. of questions:</h5></span></div></div><div class = 'row'><div class= 'col-lg-12'><select class='form-control' name=questions_number id='in' onchange='MTC()' required>
+               <option value = ''>Select</option>
+               {% for i in numbers%}
+                 {% if i == questions_number %}
+                 <option value = '{{i}}' selected="selected">{{i}}</option>
+                 {% else %}
+                 <option value = '{{i}}'>{{i}}</option>
+                 {% endif %}
+                 {% endfor %}</select></div></div>                                    
+           {% elif question_type == "Short Answer" %}
+           <div class = 'row'><div class= 'col-lg-12'><textarea name='answer' class='form-control' rows=3 style='width:100%;font-weight:bold;margin-left:10px' placeholder='Enter your answer here' required>{{answers}}</textarea></div></div>
+               </div>
+           {% elif question_type == "Long Answer" %}
+               <div class = 'row'><div class= 'col-lg-12'><textarea name='answer' class='form-control' rows=3 style='width:100%;font-weight:bold;margin-left:10px' placeholder='Enter your answer here' required>{{answers}}</textarea></div></div>
+               
+           {% endif %}
+ 
+               </div><br>
+               <div class = "container" id = "out" style="width:100%">
+               {% if question_type == "Multiple Choice Single Answer" %}                           
+               <div class="row form-group"><div class="col-lg-1"><strong>Option no.</strong></div><div class="col-lg-5"><strong>Option value</strong></div><div class="col-lg-2"><strong>Select the correct answer</strong></div></div>
+               {% for i in options %}
+               <div class="row form-group"><div class = "col-lg-1">{{i.option_desig}})</div><div class="col-lg-5">
+                 <input type = text class = "form-control" name = option{{i.option_no}} value="{{i.option_value}}" required>
+               </div><div class="col-lg-2">
+                   {% if i.answer == 1 %}
+                     <input type="radio" name = "options" value = '{{i.option_no}}' checked="checked" required>
+                   {% else %}
+                     <input type="radio" name = "options" value = '{{i.option_no}}' required>
+                   {% endif %}
+                 
+               </div>
+             </div>
+               {% endfor %}
+               {% elif question_type == "Multiple Choice Multiple Answer" %}
+               <div class="row form-group"><div class="col-lg-1"><strong>Option no.</strong></div><div class="col-lg-5"><strong>Option value</strong></div><div class="col-lg-2"><strong>Select the correct answers</strong></div></div>
+               {% for i in options %}
+               <div class="row form-group">
+                 <div class = "col-lg-1">{{i.option_desig}})</div><div class="col-lg-5"><input type = text class = "form-control" name = option{{i.option_no}} value = '{{i.option_value}}' required></div><div class="col-lg-2">
+                   {% if i.answer == 1 %}
+                   <input type="checkbox" name = "options[]" value = '{{i.option_no}}' id = option{{i.option_no}} checked>
+                   {% else %}
+                   <input type="checkbox" name = "options[]" value = '{{i.option_no}}' id = option{{i.option_no}}>
+                   {% endif %}
+                   </div></div>
+                 {% endfor %}
+               {% elif question_type == "Match the Column" %}
+               <div class="row form-group"><div class="col-lg-1"><strong>Question no.</strong></div><div class="col-lg-5"><strong>Question</strong></div><div class="col-lg-1"><strong>S no.</strong></div><div class="col-lg-5"><strong>Answer</strong></div></div>
+               {% for i in answers %}
+               <div class="row form-group"><div class = "col-lg-1">{{i.ques_no}})</div><div class="col-lg-5"><input type = text class = "form-control" name = matchQues{{i.ans_no}} value="{{i.ques_value}}" required></div><div class="col-lg-1">{{i.ans_no}})</div><div class="col-lg-5"><input type = text class = "form-control" name = matchAns{{i.ans_no}} value = "{{i.ans_value}}" required></div></div>
+               {% endfor %}
+               {% endif %} 
+               </div>
+               
+               
+               <!--<div id="my_div"></div>
+                       <script type="text/javascript">
+                       function myFunction(){
+                         var a=document.getElementById("noq");
+                         var b = a.options[a.selectedIndex].value;
+                         console.log(b);
+                         document.getElementById("my_div").innerHTML = "";
+                         for (i=1;i<=b;i++)
+                         {
+                           my_div.innerHTML = my_div.innerHTML +"<div class='form-group'><label for='inputStatus' class='col-sm-1 control-label'>"+i+"</label><div class='col-sm-6'><input class='form-control' id='inputDescription' placeholder='' type='text' required></div><div class='col-sm-3'><div class='radio'><input name='optionsRadios' id='optionsRadios1' value='option1' checked='' type='radio'></div></div></div>"
+                         }
+                       }
+                       </script>-->
+ 
+ 
+               <div class="card-footer">
+                 <button type="submit" class="btn btn-info pull-right"><i class="fa fa-edit">Modify question</i></button>
+               </div>
+               <!-- /.box-footer -->
+             </form>
+           </div>
+           </div>
+           <div class="col-lg-1"></div></div>
+ 
+     </div>
+     </section>
+     {% if message %}
+     <div class="alert alert-success">
+         <p>{{message}}</p>
+       </div>
+       {% elif wrong_message %}
+       <div class="alert alert-danger">
+         <p>{{wrong_message}}</p>
+       </div>
+     {% endif %}
+ <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+ <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+ <script>
+   $("#type").change(function(){
+       createQuestion();
+   });
+ $("#subject").change(function(){
+   changeExam();
+ });
+ function changeExam(){
+   var subject_id = $("#subject option:selected").val();
+   $.ajax({
+     type: "POST",
+     url: '{% url 'UMS_app:get_exams_by_course' %}',
+     data: {subject_id:subject_id, csrfmiddlewaretoken: '{{ csrf_token }}'},
+     dataType: 'text',
+     success:function(data){
+       var options = JSON.parse(data);
+       $("#exam").empty();
+       var list = document.getElementById("exam");
+       var default_option = new Option("Examination", "", true, true);
+       default_option.setAttribute("disabled", true);
+       list.add(default_option);
+       for (obj in options)
+       {  
+         list.add(new Option(options[obj], obj));
+       }
+       //console.log(JSON.parse(data));
+     },
+     error: function (jqXHR, exception) {
+         var msg = '';
+         if (jqXHR.status === 0) {
+             msg = 'Not connect.\n Verify Network.';
+         } else if (jqXHR.status == 404) {
+             msg = 'Requested page not found. [404]';
+         } else if (jqXHR.status == 500) {
+             msg = 'Internal Server Error [500].';
+         } else if (exception === 'parsererror') {
+             msg = 'Requested JSON parse failed.';
+         } else if (exception === 'timeout') {
+             msg = 'Time out error.';
+         } else if (exception === 'abort') {
+             msg = 'Ajax request aborted.';
+         } else {
+             msg = 'Uncaught Error.\n' + jqXHR.responseText;
+         }
+         console.log(msg);
+     },
+   });
+ }
+ </script>
+ <script>
+   function createQuestion()
+   {
+       var a = $('#type').find(":selected").text();
+       if(a != "Select")
+       {
+           var text = "";
+           if(a == "Multiple Choice Single Answer")
+           {
+               text += "<div class = 'row'><div class= 'col-lg-12'><span style='font-weight:200;margin-left:10px'><h5>Enter the no. of options:</h5></span></div></div><div class = 'row'><div class= 'col-lg-12'><select class='form-control' name=options_number id='in' onchange='optionsMCQ()' required><option value = ''>Select</option><option value = '2'>2</option><option value = '3'>3</option><option value = '4'>4</option><option value = '5'>5</option><option value = '6'>6</option><option value = '7'>7</option><option value = '8'>8</option><option value = '9'>9</option><option value = '10'>10</option></select></div></div>";                                    
+           }
+           else if(a == "Multiple Choice Multiple Answer")
+           {
+             text += "<div class = 'row'><div class= 'col-lg-12'><span style='font-weight:200;margin-left:10px'><h5>Enter the no. of options:</h5></span></div></div><div class = 'row'><div class= 'col-lg-12'><select class='form-control' name=options_number id='in' onchange='optionsMCMQ()' required><option value = ''>Select</option><option value = '2'>2</option><option value = '3'>3</option><option value = '4'>4</option><option value = '5'>5</option><option value = '6'>6</option><option value = '7'>7</option><option value = '8'>8</option><option value = '9'>9</option><option value = '10'>10</option></select></div></div>";                                    
+           }
+           else if(a =="Match the Column")
+           {
+             text += "<div class = 'row'><div class= 'col-lg-12'><span style='font-weight:200;margin-left:10px'><h5>Enter the no. of questions:</h5></span></div></div><div class = 'row'><div class= 'col-lg-12'><select class='form-control' name=questions_number id='in' onchange='MTC()' required><option value = ''>Select</option><option value = '2'>2</option><option value = '3'>3</option><option value = '4'>4</option><option value = '5'>5</option><option value = '6'>6</option><option value = '7'>7</option><option value = '8'>8</option><option value = '9'>9</option><option value = '10'>10</option></select></div></div>";                                    
+           }
+           else if(a == "Short Answer"||a=="Long Answer")
+           {
+               text += "<div class = 'row'><div class= 'col-lg-12'><textarea name='answer' class='form-control' rows=3 style='width:100%;font-weight:bold;margin-left:10px' placeholder='Enter your answer here' required></textarea></div></div>";
+           }
+           text += "<br><br>";
+           document.getElementById('question').innerHTML = text;
+           document.getElementById('out').innerHTML = "";
+       }
+       else
+       {
+         document.getElementById('question').innerHTML = "";
+         document.getElementById('out').innerHTML = "";
+       }
+   }
+   function optionsMCQ()
+   {
+       var i, text = "";
+       if($("#in option:selected").val() != "")
+       {
+         text = '<div class="row form-group"><div class="col-lg-1"><strong>Option no.</strong></div><div class="col-lg-5"><strong>Option value</strong></div><div class="col-lg-2"><strong>Select the correct answer</strong></div></div>';
+         a = document.getElementById('in').value;
+         for(i = 1; i <= a; i++)
+         { 
+             text += '<div class="row form-group"><div class = "col-lg-1">' + String.fromCharCode(96 + i) + ')</div><div class="col-lg-5"><input type = text class = "form-control" name = option' + i +' required></div><div class="col-lg-2"><input type="radio" name = "options" value = ' + i + ' required></div></div>';      
+         }
+       }
+       document.getElementById('out').innerHTML = text;
+   }
+   function optionsMCMQ()
+   {
+     var i;
+     if($("#in option:selected").val() != "")
+     {
+       var text = '<div class="row form-group"><div class="col-lg-1"><strong>Option no.</strong></div><div class="col-lg-5"><strong>Option value</strong></div><div class="col-lg-2"><strong>Select the correct answers</strong></div></div>';
+       a = document.getElementById('in').value;
+       for(i = 1; i <= a; i++)
+       { 
+           text += '<div class="row form-group"><div class = "col-lg-1">' + String.fromCharCode(96 + i) + ')</div><div class="col-lg-5"><input type = text class = "form-control" name = option' + i +' required></div><div class="col-lg-2"><input type="checkbox" name = "options[]" value = ' + i + ' id = option' + i +'></div></div>';      
+       }
+       document.getElementById('out').innerHTML = text;
+     }
+   }
+   function MTC()
+   {
+     var i;
+     if($("#in option:selected").val() != "")
+     {
+       var text = '<div class="row form-group"><div class="col-lg-1"><strong>Question no.</strong></div><div class="col-lg-5"><strong>Question</strong></div><div class="col-lg-1"><strong>S no.</strong></div><div class="col-lg-5"><strong>Answer</strong></div></div>';
+       a = document.getElementById('in').value;
+       for(i = 1; i <= a; i++)
+       { 
+           text += '<div class="row form-group"><div class = "col-lg-1">' + String.fromCharCode(96 + i) + ')</div><div class="col-lg-5"><input type = text class = "form-control" name = matchQues' + i +' required></div><div class="col-lg-1">'+ i +')</div><div class="col-lg-5"><input type = text class = "form-control" name = matchAns' + i +' required></div></div>';      
+       }
+       document.getElementById('out').innerHTML = text;
+     }
+   }
+   </script> 
+
+ {%endblock%}

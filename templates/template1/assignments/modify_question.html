@@ -1,0 +1,85 @@
+{% extends 'base1.html' %}
+{% load static %}
+
+ {% block title %} Modify Questions {% endblock %}
+ 
+ {% block content %}
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+</head>
+<div class="wrapper">
+    <!-- Main content -->
+    <h1>Staff DashBoard-Modify Questions</h1>
+    <section class="content container-fluid">
+      </div>
+        <table id="example" class="table table-striped table-bordered nowrap" style="width:100%">
+        <thead>
+            <tr>
+                <th>Question</th>
+                <th>Description</th>
+                <th>Question Type</th>
+                <th>Level</th>
+                <th>Exam</th>
+                <th>Score</th>
+                <th>Options</th>
+                <th>Answers</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Modified</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+      {% for i in questions %}
+        <tr><td>{{i.question}}</td><td>{{i.description}}</td><td>{{i.question_type}}</td><td>{{i.level}}</td><td>{{i.exam}}</td><td>{{i.score}}</td><td>{{i.options}}</td><td>{{i.answers}}</td><td>
+          {% if i.status == 1 %}
+          Active
+          {% elif i.status == 0 %}
+          Inactive
+          {% endif %}
+        </td><td>{{i.created}}</td><td>{{i.modified}}</td><td><form action = "{% url 'UMS_app:update_question'%}" method = "POST"><input type = "hidden" name = "id" value = "{{i.id}}">{% csrf_token %}<button class="btn btn-xs btn-primary" type="submit"><i class="fa fa-edit"></i>Modify</button></td></form></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+    </tbody>
+  </table>
+  {% if message %}
+           <div class="alert alert-success">
+               <p>{{message}}</p>
+             </div>
+             {% elif wrong_message %}
+             <div class="alert alert-danger">
+               <p>{{wrong_message}}</p>
+             </div>
+           {% endif %}
+    </section>
+</div>
+<script>
+  var Table;
+  $(document).ready(function() {
+  Table =  $('#example').DataTable( {
+    dom: 'Bfrtip',
+    buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+    ],
+    "order":[],
+        responsive: {
+            details: {
+                display: $.fn.dataTable.Responsive.display.modal( {
+                    header: function ( row ) {
+                        var data = row.data();
+                        return 'Details for '+data[0];
+                    }
+                } ),
+                renderer: $.fn.dataTable.Responsive.renderer.tableAll( {
+                    tableClass: 'table'
+                } )
+            }
+        }
+    } );
+} );
+</script>
+ {%endblock%}

@@ -1,0 +1,96 @@
+{%extends 'base2.html'%}
+{% load static %}
+
+ {% block title %} Student DashBoard-Exams {% endblock %}
+ {%block content%}
+ <head>
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+</head>
+ 
+   <!-- Content Wrapper. Contains page content -->
+   <div class="content-wrapper">
+     <!-- Content Header (Page header) -->
+       <h1>
+        Student DashBoard-Exams
+       </h1>
+ 
+     <!-- Main content -->
+     <section class="content container-fluid">
+ 
+       <!--------------------------
+         | Your Page Content Here |
+         -------------------------->
+             <a href="/approved_exams/"><button class = "btn btn-primary"><i class="fa fa-eye"></i>Approved Examinations</button></a>
+             <br>
+             <br>
+              
+         <table id="example" class="table table-striped table-bordered nowrap" style="width:100%">
+        
+           <thead>
+             <tr>
+               <th>S.No.</th>
+               <th>Examination</th>
+               <th>Description</th>
+               <th>Subjects</th>
+               <th>Year</th>
+               <th>Attempts Left</th>
+               <th>Action</th>
+             </tr>
+           </thead>
+           <tbody>
+             {% for i in exams %}
+               <tr>
+                 <td>{{i.id}}</td>
+                 <td>{{i.exam_name}}</td>
+                 <td>{{i.description}}</td>
+                 <td>{{ i.subject_name }}</td>
+                 <td>{{ i.year }}</td>
+                 <td>{{i.attempts_left}}</td>
+                 {% if i.attempts_left == 0%}
+                 <td><button class="btn btn-xs btn-primary" disabled=""><i class="fa fa-edit"></i>Register</button></td>
+                 {% else %}
+                 <td><form action = "{% url 'UMS_app:exams' %}" method = "POST"><input type = "hidden" name = "exam_id" value = "{{i.id}}">{% csrf_token %}<button class="btn btn-xs btn-primary" type="submit"><i class="fa fa-edit"></i>Register</button></form></td>
+                 {% endif %}
+               </tr>
+             {% endfor %}
+             </tbody>
+           </table>
+     </section>
+     {% if message %}
+           <div class="alert alert-success">
+               <p>{{message}}</p>
+             </div>
+             {% elif wrong_message %}
+             <div class="alert alert-danger">
+               <p>{{wrong_message}}</p>
+             </div>
+           {% endif %}
+   </div>
+ </div>
+ <script src="{% static "jquery.min.js" %}"></script>
+ <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+ <script>
+   var Table;
+   $(document).ready(function() {
+   Table =  $('#example').DataTable( {
+     "order":[],
+         responsive: {
+             details: {
+                 display: $.fn.dataTable.Responsive.display.modal( {
+                     header: function ( row ) {
+                         var data = row.data();
+                         return 'Details for '+data[0];
+                     }
+                 } ),
+                 renderer: $.fn.dataTable.Responsive.renderer.tableAll( {
+                     tableClass: 'table'
+                 } )
+             }
+         }
+     } );
+ } );
+ </script>
+ {%endblock%}

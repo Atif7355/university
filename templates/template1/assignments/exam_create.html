@@ -1,0 +1,159 @@
+ {% extends 'base1.html' %}
+ {% load static %}
+
+ {% block title %} Exam Create {% endblock %}
+ 
+ {% block content %}
+ <head>
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+   <div class="content-wrapper">
+     <section class="content container-fluid">
+         <div class="container-fluid">
+         <div class="box box-info">
+             <div class="box-header with-border">
+               <h3 class="box-title">Staff DashBoard-Create an examination</h3>
+             </div>
+             <form class="form-horizontal" action="/add_exam/" method="POST">
+              <div class="card-body">
+                 <div class="form-group">
+                   <label for="inputName" class="col-sm-2 control-label">Name</label>
+                     <input class="form-control" id="inputName" placeholder="Name" type="text" name="exam_name" required>
+                 </div>
+                 <div class="form-group">
+                   <label for="inputDescription" class="col-sm-2 control-label">Description</label>
+                     <input class="form-control" id="inputDescription" placeholder="Description" type="text" name="description" required>
+                 </div>
+                 <div class="form-group">
+                   <label for="inputCourse" class="col-sm-2 control-label">Subjects</label>
+                  <select class="form-control" name="subject_id" required>
+                           <option disabled selected value>Select option</option>
+                           {% for i in subjects %}
+                             <option value = "{{i.id}}">{{ i.subject_name }}</option>
+                           {% endfor %}
+                   </select>
+                 </div>
+ 
+                 <div class="form-group">
+                   <label for="inputYear" class="col-sm-2 control-label">Year</label>
+                     <input class="form-control" id="inputYear" placeholder="Year" type="text" name="year" required>
+                   <label for="inputStatus" class="col-sm-1 control-label">Status</label>
+                     <select class="form-control" name="status" required>
+                           <option disabled selected value>   Select option</option>
+                           <option value = "1">Active</option>
+                           <option value = "0">Inactive</option>
+                     </select>
+                 </div>
+                 <div class="form-group">
+                   <label for="startDate" class="col-sm-2 control-label">Start Date</label>
+                     <input class="form-control" id="startDate" placeholder="startDate" type="date" name="startDate" required>
+                   <label for="endDate" class="col-sm-2 control-label">End Date</label>
+                     <input class="form-control" type="date" name="endDate" id="endDate" placeholder="endDate" required>
+                 </div>
+                 <div class="form-group">
+                   <label for="startTime" class="col-sm-2 control-label">Start Time</label>
+                     <input class="form-control" id="startTime" placeholder="hh:mm:ss" type="text" name="startTime" required>
+                   <label for="endTime" class="col-sm-2 control-label">End Time</label>
+                     <input class="form-control" type="text" name="endTime" id="endTime" placeholder="hh:mm:ss" required>
+                 </div>
+                
+ 
+ 
+                 <div class="form-group">
+                   <label for="inputPassPercentage" class="col-sm-2 control-label">Pass percentage</label>
+                     <input class="form-control" id="inputPassPercentage" placeholder="%" type="text" name="pass_percentage" required>
+                   <label for="inputMaxNoOfQuestions" class="col-sm-2 control-label">Max No. Of Questions</label>
+                     <input class="form-control" id="inputMaxNoOfQuestions" placeholder="Max Qs" type="text" name="no_of_questions" required>
+                   <label for="inputAttemptsAllowed" class="col-sm-2 control-label">Attempts Allowed</label>
+                     <input class="form-control" id="AttemptsAllowed" placeholder="Attempts" type="text" name="attempts_allowed" required>
+                 </div>
+ 
+               </div>
+               <!-- /.box-body -->
+               <div class="card-footer">
+                 <button type="submit" class="btn btn-info pull-right">Add examination</button>
+               </div>
+               <!-- /.box-footer -->
+             </form>
+           {% if message %}
+           <div class="alert alert-success">
+               <p>{{message}}</p>
+             </div>
+             {% elif wrong_message %}
+             <div class="alert alert-danger">
+               <p>{{wrong_message}}</p>
+             </div>
+           {% endif %}
+     </section>
+   </div>
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+ <script>
+   $(function () {
+     //Initialize Select2 Elements
+     $('.select2').select2()
+ 
+     //Datemask dd/mm/yyyy
+     $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+     //Datemask2 mm/dd/yyyy
+     $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+     //Money Euro
+     $('[data-mask]').inputmask()
+ 
+     //Date range picker
+     $('#reservation').daterangepicker()
+     //Date range picker with time picker
+     $('#reservationtime').daterangepicker({ timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A' })
+     //Date range as a button
+     $('#daterange-btn').daterangepicker(
+       {
+         ranges   : {
+           'Today'       : [moment(), moment()],
+           'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+           'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+         },
+         startDate: moment().subtract(29, 'days'),
+         endDate  : moment()
+       },
+       function (start, end) {
+         $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+       }
+     )
+ 
+     //Date picker
+     $('#datepicker').datepicker({
+       autoclose: true
+     })
+ 
+     //iCheck for checkbox and radio inputs
+     $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+       checkboxClass: 'icheckbox_minimal-blue',
+       radioClass   : 'iradio_minimal-blue'
+     })
+     //Red color scheme for iCheck
+     $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+       checkboxClass: 'icheckbox_minimal-red',
+       radioClass   : 'iradio_minimal-red'
+     })
+     //Flat red color scheme for iCheck
+     $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+       checkboxClass: 'icheckbox_flat-green',
+       radioClass   : 'iradio_flat-green'
+     })
+ 
+     //Colorpicker
+     $('.my-colorpicker1').colorpicker()
+     //color picker with addon
+     $('.my-colorpicker2').colorpicker()
+ 
+     //Timepicker
+     $('.timepicker').timepicker({
+       showInputs: false
+     })
+   })
+ </script>
+
+{% endblock %}

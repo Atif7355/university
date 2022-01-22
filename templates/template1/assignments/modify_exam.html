@@ -1,0 +1,78 @@
+{% extends 'base1.html' %}
+{% load static %}
+{% block title %}Modify Exams{% endblock %}
+
+
+{% block content %}
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+</head>
+<div class="wrapper">
+       <!-- Main content -->
+    <section class="content container-fluid">
+        <h1>Staff DashBoard-Modify Questions</h1>
+        <table id="example" class="table table-striped table-bordered nowrap" style="width:100%">
+       
+          <thead>
+            <tr>
+              <th>S.No.</th>
+              <th>Examination</th>
+              <th>Description</th>
+              <th>Subject</th>
+              <th>Year</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in exams %}
+              <tr>
+                <td>{{i.id}}</td>
+                <td>{{i.exam_name}}</td>
+                <td>{{i.description}}</td>
+                <td>{{ i.subject_id.subject_name }}</td>
+                <td>{{ i.year }}</td>
+                <td><form action = "{% url 'UMS_app:update_exam' %}" method = "POST"><input type = "hidden" name = "id" value = "{{i.id}}">{% csrf_token %}<button class="btn btn-xs btn-primary" type="submit"><i class="fa fa-edit"></i>Modify</button></form></td>
+              </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% if message %}
+           <div class="alert alert-success">
+               <p>{{message}}</p>
+             </div>
+             {% elif wrong_message %}
+             <div class="alert alert-danger">
+               <p>{{wrong_message}}</p>
+             </div>
+           {% endif %}
+    </section>
+  </div>
+</div>
+<script>
+  var Table;
+  $(document).ready(function() {
+  Table =  $('#example').DataTable( {
+    dom: 'Bfrtip',
+    buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+    ],
+    "order":[],
+        responsive: {
+            details: {
+                display: $.fn.dataTable.Responsive.display.modal( {
+                    header: function ( row ) {
+                        var data = row.data();
+                        return 'Details for '+data[0];
+                    }
+                } ),
+                renderer: $.fn.dataTable.Responsive.renderer.tableAll( {
+                    tableClass: 'table'
+                } )
+            }
+        }
+    } );
+} );
+</script>
+{% endblock %}

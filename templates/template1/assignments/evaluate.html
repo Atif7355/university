@@ -1,0 +1,88 @@
+{% extends 'base1.html' %}
+ {% load static %}
+
+ {% block title %} Staff DashBoard-Evaluate {% endblock %}
+ {%block content%}
+ <head>
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+ </head>
+ <div class="wrapper">
+ 
+   <!-- Content Wrapper. Contains page content -->
+   <div class="content-wrapper">
+    <h1>Evaluation</h1>
+ 
+     <!-- Main content -->
+     <section class="content container-fluid">
+ 
+       <!--------------------------
+         | Your Page Content Here |
+         -------------------------->
+         <table id="example" class="table table-striped table-bordered nowrap" style="width:100%">
+            <thead>
+            <tr>
+            <th>Exam Name</th>
+            <th>Subject</th>
+            <th>Year</th>
+            <th>Description</th>
+            <th>Duration</th>
+            <th>Number of Questions</th>
+            <th>Pass Percentage</th>
+            <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for t in data %}
+               <tr><td>{{ t.exam_name }}</td>
+                 <td>{{t.subject}}</td>
+                 <td>{{t.year}}</td>
+                 <td>{{ t.description }}</td>
+                 <td>{{ t.duration }}</td>
+                 <td>{{ t.no_of_questions }}</td>
+                 <td>{{ t.pass_percentage }}</td>
+                 <td align="center">
+                   <form action = "/register_evaluate/" method = "POST">
+                   {% csrf_token %}
+                   <input type = "hidden" name="exam_id" value = "{{t.exam_id}}">
+                   <button class="btn btn-success btn-xs" type="submit"><i class="fa fa-check"></i>Evaluate</button>
+                 </form>
+                 </td>
+             {% endfor %}
+             </tr>
+            </tbody>
+            </table>
+ 
+ 
+     </section>
+   </div>
+ </div>
+ <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+<script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+ <script>
+   var Table;
+   $(document).ready(function() {
+   Table =  $('#example').DataTable( {
+     dom: 'Bfrtip',
+     buttons: [
+         'copy', 'csv', 'excel', 'pdf', 'print'
+     ],
+     "order":[],
+         responsive: {
+             details: {
+                 display: $.fn.dataTable.Responsive.display.modal( {
+                     header: function ( row ) {
+                         var data = row.data();
+                         return 'Details for '+data[0];
+                     }
+                 } ),
+                 renderer: $.fn.dataTable.Responsive.renderer.tableAll( {
+                     tableClass: 'table'
+                 } )
+             }
+         }
+     } );
+ } );
+ </script>
+{%endblock%}

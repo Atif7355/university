@@ -1,0 +1,130 @@
+{% extends 'base1.html' %}
+ {% load static %}
+
+ {% block title %} Exam Registrations {% endblock %}
+ {% block content %}
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+</head>
+<div class="wrapper">
+  <!-- Main content -->
+  <h1>Staff DashBoard-Exam Registrations</h1>
+
+    <section class="content container-fluid">
+ <table id="example" class="table table-striped table-bordered nowrap" style="width:100%">
+ <thead>
+ <tr>
+   
+ <th>User Name</th>
+ <th>Email</th>
+ <th>Examination</th>
+ <th>Registered Time</th>
+ <th>Attempt no.</th>
+ <th>Status</th>
+ </tr>
+ </thead>
+ <tbody>
+ {% for t in data %}
+ 
+    <tr>
+      <td>{{ t.first_name }} {{ t.last_name }}</td>
+      <td>{{ t.email }}</td>
+      <td>{{ t.exam_name }}</td>
+      <td>{{t.registered_time}}</td>
+      <td>{{ t.attempt_no }}</td>
+      <td align="center">
+      {% if t.registered %}
+        <button class="btn btn-success btn-xs statusChange registerStatus{{t.exam_id}}" type="button" value="{{ t.exam_id }}"><i class="fa fa-check"></i>Registered</button>
+        {% else %}
+        <button class="btn btn-warning btn-xs statusChange registerStatus{{t.exam_id}}" type="button" value="{{ t.exam_id }}"><i class="fa fa-times"></i>Unregistered</button>
+        {% endif %}
+        </td>
+      {% endfor %}
+  </tr>
+ </tbody>
+ </table>
+ </section>
+  </div>
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+          var Table;
+          $(document).ready(function() {
+          Table =  $('#example').DataTable( {
+                responsive: {
+                    details: {
+                        display: $.fn.dataTable.Responsive.display.modal( {
+                            header: function ( row ) {
+                                var data = row.data();
+                                return 'Details for '+data[0];
+                            }
+                        } ),
+                        renderer: $.fn.dataTable.Responsive.renderer.tableAll( {
+                            tableClass: 'table'
+                        } )
+                    }
+                }
+            } );
+        } );
+      </script>
+
+<script>
+    $(document).on('click', ".statusChange",function(){
+      var user_exam_attempt_id = $(this).val(), i;
+      console.log(user_exam_attempt_id);
+      $.ajax({
+        type: "POST",
+        url: '/exam_registrations/',
+        data: {user_exam_attempt_id:user_exam_attempt_id, csrfmiddlewaretoken: '{{ csrf_token }}'},
+        dataType: 'text',
+        success:function(data){
+          console.log("psjdjec");
+            if(data == "0")
+            {
+              console.log("123");
+              var clickedButtons = document.getElementsByClassName("registerStatus" + user_exam_attempt_id);
+              for(i = 0; i < clickedButtons.length; i++)
+              {
+                clickedButtons[i].classList.remove("btn-success");
+                clickedButtons[i].classList.add("btn-warning");
+                clickedButtons[i].innerHTML = "<i class='fa fa-times'></i>Unregistered";
+              }
+            }
+            else if(data == "1")
+            {
+              console.log("456");
+              var clickedButtons = document.getElementsByClassName("registerStatus" + user_exam_attempt_id);
+              for(i = 0; i < clickedButtons.length; i++)
+              {
+                clickedButtons[i].classList.remove("btn-warning");
+                clickedButtons[i].classList.add("btn-success");
+                clickedButtons[i].innerHTML = "<i class='fa fa-check'></i>Registered";
+              }
+            }
+            var order = Table.order();
+            var myTable =  $('#example').DataTable( {
+              "destroy":true,
+              "order": order,
+              responsive: {
+                  details: {
+                      display: $.fn.dataTable.Responsive.display.modal( {
+                          header: function ( row ) {
+                              var data = row.data();
+                              return 'Details for '+data[0];
+                          }
+                      } ),
+                      renderer: $.fn.dataTable.Responsive.renderer.tableAll( {
+                          tableClass: 'table'
+                      } )
+                  }
+              },
+          } );
+          Table = myTable;
+        }
+      });
+  });
+ 
+    </script>
+{%endblock%}

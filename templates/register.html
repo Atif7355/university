@@ -1,0 +1,161 @@
+{%extends 'base.html'%}
+{%block title%}Sign Up{%endblock%}
+{% block body %}
+<head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+</head>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+<div class="container-fluid">
+<h1 class="text-center"> Register Account </h1>
+<div class="card bg-success">
+<article class="card-body mx-auto" style="max-width: 400px;">
+	<h4 class="card-title mt-3 text-center">Register</h4>
+	<form action="{% url 'UMS_app:dosignup' %}" method="POST">
+  {%csrf_token%}
+    <div class="form-group input-group">
+    <div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+		 </div>
+        <input class="form-control" name="firstname" placeholder="First Name" type="text">
+    </div>
+    <div class="form-group input-group">
+		<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+		 </div>
+        <input class="form-control" name="lastname" placeholder="Last Name" type="text">
+    </div>
+    <div class="form-group input-group">
+    	<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+		 </div>
+        <input class="form-control" type="email" placeholder="Email Address" name="email">
+    </div> <!-- form-group// -->
+    <div class="form-group input-group">
+    <div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+		 </div>
+    <select class="form-control" id="seeAnotherField" name="role">
+    <option value="select">Role</option>
+          <option value="hod">hod</option>
+          <option value="staff">staff</option>
+          <option value="student">student</option>
+    </select>
+  </div>
+    <div class="form-group input-group">
+    	<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+		</div>
+        <input class="form-control" placeholder="Create password" type="password" name="password">
+    </div> <!-- form-group// -->
+    <div class="form-group input-group">
+    	<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+		</div>
+        <input class="form-control" placeholder="Confirm password" type="password" name="cpassword">
+    </div> <!-- form-group// -->  
+    <div class="form-group input-group" id="otherFieldDiv">
+    	<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+		 </div>
+        <input class="form-control" placeholder="Address" type="text" name="address" id="otherField">
+    </div> <!-- form-group// -->
+    <div class="form-group input-group" id="otherFieldDiv1">
+    	<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+		</div>
+    <select class="form-control" name="course" id="otherField1" >
+                        <option value="select">Course</option>
+                        {% for course in courses %}
+                          <option value="{{ course.id }}">{{ course.course_name }}</option>
+                        {% endfor %}
+                    </select>
+    </div> <!-- form-group// -->
+    <div class="form-group input-group" id="otherFieldDiv2">
+    <div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+		</div>
+    <select class="form-control" id="otherField2" name="gender">
+    <option value="select">Gender</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
+  </div>
+    <div class="form-group input-group" id="otherFieldDiv3">
+    	<div class="input-group-prepend">
+		    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+		</div>
+        <select class="form-control" name="session_year" id="otherField3">
+        <option value="select">Session Year</option>
+                        {% for sessionyear in session_years %}
+                          <option value="{{ sessionyear.id }}">{{ sessionyear.session_start_year }} - {{ sessionyear.session_end_year }}</option>
+                        {% endfor %}
+                    </select>
+    </div> <!-- form-group// -->
+    <br>                                    
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-block"> Register Account  </button>
+    </div> <!-- form-group// -->      
+    <p class="text-center">Have an account? <a href="/logi">Log In</a> </p>                                                                 
+</form>
+</article>
+</div> 
+
+</div> 
+{% comment %} Display Messages {% endcomment %}
+{% if messages %}
+<div class="col-12">
+   {% for message in messages %}
+   {% if message.tags == "error" %}
+   <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+      <b>{{ message }}</b>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+   </div>
+   {% endif %}
+   {% endfor %}
+{% endif %}
+</div>
+<script>
+$("#seeAnotherField").change(function() {
+  if ($(this).val() == "student") {
+    $('#otherFieldDiv').show();
+    $('#otherField').attr('required', '');
+    $('#otherField').attr('data-error', 'This field is required.');
+    $('#otherFieldDiv1').show();
+    $('#otherField1').attr('required', '');
+    $('#otherField1').attr('data-error', 'This field is required.');
+    $('#otherFieldDiv2').show();
+    $('#otherField2').attr('required', '');
+    $('#otherField2').attr('data-error', 'This field is required.');
+    $('#otherFieldDiv3').show();
+    $('#otherField3').attr('required', '');
+    $('#otherField3').attr('data-error', 'This field is required.');
+  } 
+  else if ($(this).val() == "staff") {
+    $('#otherFieldDiv').show();
+    $('#otherField').attr('required', '');
+    $('#otherField').attr('data-error', 'This field is required.');
+  }
+  else if($(this).val()=="hod" || $(this).val()=="select") {
+    $('#otherFieldDiv').hide();
+    $('#otherField').removeAttr('required');
+    $('#otherField').removeAttr('data-error');
+    $('#otherFieldDiv1').hide();
+    $('#otherField1').removeAttr('required');
+    $('#otherField1').removeAttr('data-error');
+    $('#otherFieldDiv2').hide();
+    $('#otherField2').removeAttr('required');
+    $('#otherField2').removeAttr('data-error');
+    $('#otherFieldDiv3').hide();
+    $('#otherField3').removeAttr('required');
+    $('#otherField3').removeAttr('data-error');
+  }
+});
+$("#seeAnotherField").trigger("change");
+</script>
+{% endblock body %}

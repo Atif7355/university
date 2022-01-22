@@ -1,0 +1,58 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block title %}Assignments{% endblock %}
+
+
+{% block content %}
+
+    <div class="container">
+
+        <div class="col-12 col-sm-6 col-md-10">
+            {% if request.user.is_authenticated and request.user.role == 'staff' %}
+                {% for foo in assignment %}
+                    <h3><strong> {{ foo.title }}  </strong></h3>
+                    <hr/>
+                    <p> <h4>Content</h4> {{ foo.content }} </p>
+                    <br/>
+                     <h4>File</h4><a href="{{foo.file.url}}" download="{{foo.file.url}}">Download</a>
+                    <br/>
+                    <p> <h4>Marks</h4> {{ foo.marks }} </p>
+
+                    <p> <h4>Time</h4> {{ foo.duration }} hours </p>
+
+                    <p> <h4>Due Date</h4> {{foo.due_date}} </p>
+
+                {% endfor %}
+                <hr/>
+
+
+                <h4><a href="{% url 'UMS_app:assignment-create' %}">Create a Assignment</a></h4>
+
+
+            {% else %}
+
+
+                {% for foo in assignment %}
+                    <h3><strong> {{ foo.title }}  </strong></h3>
+                    <hr/>
+                    <p> <h4>Content</h4> {{ foo.content }} </p>
+                    <br/>
+                    <h4>File</h4><a href="{{foo.file.url}}" download="{{foo.file.url}}">Download</a>
+                    <br/>
+                    <p> <h4>Marks</h4> {{ foo.marks }} </p>
+
+                    <p> <h4>Time</h4> {{ foo.duration }} hours </p>
+                          <br/>
+                      <h4><a href="{% url 'UMS_app:assignment-submission' %}">Submit Assignment</a></h4>
+                  <hr/>
+                {% endfor %}
+                <hr/>
+
+
+            {% endif %}
+            <br/>
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,60 @@
+{%extends 'base2.html'%}
+{% load static %}
+
+ {% block title %} Student DashBoard-Approved Exams {% endblock %}
+ {%block content%}
+ <head>
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+ </head>
+ <div class="wrapper">
+   <!-- Content Wrapper. Contains page content -->
+   <div class="content-wrapper">
+       <h1>
+         Student DashBoard-Exams
+       </h1>
+ 
+     <!-- Main content -->
+     <section class="container-fluid">
+ 
+       <!--------------------------
+         | Your Page Content Here |
+         -------------------------->
+         {% for i in exams %}
+         <div class = "col-lg-6">
+         <div class="box box-primary">
+           <div class="box-header with-border">
+             <h3 class="box-title">{{i.exam_name}}</h3>
+             <div class="box-tools pull-right">
+               <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+               </button>
+             </div>
+           </div>
+         <div class="card-body">
+           <div class="container-fluid">
+             <div class="row"><div class="col-lg-6"><h4>Description:</h4></div><div class="col-lg-6">{{i.exam_name}}</div></div>
+             <div class="row"><div class="col-lg-6"><h4>Subject:</h4></div><div class="col-lg-6">{{i.subject_name}}</div></div>            
+             <div class="row"><div class="col-lg-6"><h4>No. of Questions:</h4></div><div class="col-lg-6">{{i.no_of_questions}}</div></div>
+             <div class="row"><div class="col-lg-6"><h4>Attempt no:</h4></div><div class="col-lg-6">{{i.attempt_no}}</div></div>
+             <div class="row"><div class="col-lg-6"><h4>Pass percentage:</h4></div><div class="col-lg-6">{{i.pass_percentage}}</div></div>
+             <div class="row"><div class="col-lg-6"><h4>Start Time:</h4></div><div class="col-lg-6">{{i.start_time}}</div></div>
+             <div class="row"><div class="col-lg-6"><h4>End Time:</h4></div><div class="col-lg-6">{{i.end_time}}</div></div>
+           </div>
+         </div>
+         {% if i.attemptable == 0%}
+         <div class="card-footer"><button class="btn btn-primary disabled" type="submit">Attempt</button></div>
+         {% else %}
+         <div class="card-footer"><form method = "POST" action = "/attempt_exam/"><input type = "hidden" name = "exam_id" value = "{{i.exam_id}}"><input type = "hidden" name = "registration_id" value = "{{i.registration_id}}">{% csrf_token %}<button class="btn btn-primary" type="submit">Attempt</button></div>
+         {% endif %}
+       </div>
+     </div>
+       {% endfor %}
+ 
+     </section>
+   </div>
+ </div>
+ <script src="{% static "jquery.min.js" %}"></script>
+ <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script> 
+ {%endblock%}
