@@ -61,7 +61,7 @@ class AddStudentForm(forms.Form):
 class AssignmentCreateForm(forms.ModelForm):
     class Meta:
         model = Assignment
-        fields = ['title', 'content', 'file', 'marks','due_date', 'duration']
+        fields = ['title', 'content', 'file', 'marks','due_date']
 
     def __init__(self, *args, **kwargs):
         super(AssignmentCreateForm, self).__init__(*args, **kwargs)
@@ -70,7 +70,6 @@ class AssignmentCreateForm(forms.ModelForm):
         self.fields['file'].label = " Upload File"
         self.fields['marks'].label = "Marks"
         self.fields['due_date'].label = "Due Date"
-        self.fields['duration'].label = "Duration"
 
         self.fields['title'].widget.attrs.update(
             {
@@ -102,25 +101,7 @@ class AssignmentCreateForm(forms.ModelForm):
             }
         )
 
-        self.fields['duration'].widget.attrs.update(
-            {
-                'placeholder': '3 hour, 2 hour etc ...',
-            }
-        )
 
-    def is_valid(self):
-        valid = super(AssignmentCreateForm, self).is_valid()
-
-        # if already valid, then return True
-        if valid:
-            return valid
-        return valid
-
-    def save(self, commit=True):
-        course = super(AssignmentCreateForm, self).save(commit=False)
-        if commit:
-            course.save()
-        return course
 
 class AssignmentSubmissionForm(forms.ModelForm):
     class Meta:
