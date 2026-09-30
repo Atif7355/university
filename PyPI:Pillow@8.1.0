@@ -1,0 +1,7 @@
+\
+# requirements.txt (or setup.py / pyproject.toml dependency pin)
+# Fix: upgrade Pillow to a patched release that resolves
+# GHSA-3f63-hfp8-52jq / CVE-2023-50447 (Arbitrary Code Execution via
+# PIL.ImageMath.eval allowing arbitrary code execution through
+# crafted environment/expression handling).
+Pillow==10.2.0
